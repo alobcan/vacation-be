@@ -1,22 +1,15 @@
 import express from 'express';
-import graphqlHttp from 'express-graphql';
-import buildSchema from 'graphql';
+import { graphqlHTTP } from 'express-graphql';
+import { buildSchema } from 'graphql';
 
 const app = express();
 
-const { buildSchm } = buildSchema;
-
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
 app.use(express.json());
 
 app.use(
   '/graphql',
-  graphqlHttp({
-    schema: buildSchm(`
+  graphqlHTTP({
+    schema: buildSchema(`
       type RootQuery{
         events: [String!]!
       }
@@ -26,8 +19,8 @@ app.use(
       }
         
       schema {
-        query:
-        mutation:
+        query: RootQuery
+        mutation: RootMutation
       }
     `),
     rootValue: {
@@ -37,9 +30,9 @@ app.use(
       createEvent: (args) => {
         const eventName = args.name;
         return eventName;
-      }
+      },
     },
-    graphiql: true
+    graphiql: true,
   })
 );
 
