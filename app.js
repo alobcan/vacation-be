@@ -1,6 +1,8 @@
 import express from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'graphql';
+import mongoose from 'mongoose';
+import Event from './models/event.js';
 
 const app = express();
 
@@ -43,22 +45,51 @@ app.use(
     schema: schema,
     rootValue: {
       events: () => {
-        return events;
+        return Event.find()
+          .then((events) => {
+            return events.map((event) => {
+              return { ...event._doc, _id: event.id.toString() };
+            });
+          })
+          .catch((err) => {
+            throw err;
+          });
       },
       createEvent: (args) => {
-        const event = {
-          _id: Math.random().toString(),
+        const event = new Event({
           title: args.eventInput.title,
           description: args.eventInput.description,
           price: +args.eventInput.price,
           date: new Date().toISOString(),
-        };
-        events.push(event);
-        return event;
+        });
+        return event
+          .save()
+          .then((result) => {
+            console.log(result);
+            return { ...result._doc };
+          })
+          .catch((err) => {
+            console.log(err);
+            throw err;
+          });
       },
     },
     graphiql: true,
   })
 );
 
-app.listen(3000);
+mongoose
+  .connect(
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.ludkn.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => {
+    app.listen(3000);
+  })
+  .catch((err) => {
+    console.log(process.env.MONGO_URL);
+    console.log(err);
+  });

@@ -1,0 +1,8 @@
+{
+  "env":{
+     "MONGO_URL": "mongodb+srv://alexander:nAasgqCeLAHgLH01@cluster0.ludkn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+     "MONGO_USER": "alexander",
+     "MONGO_PASS": "nAasgqCeLAHgLH01",
+     "MONGO_DB": "events-react-dev"
+  }
+}
