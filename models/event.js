@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-let eventSchema = mongoose.Schema({
+const eventSchema = mongoose.Schema({
   title: {
     type: String,
     required: true,
