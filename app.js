@@ -1,12 +1,10 @@
 import express from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import mongoose from 'mongoose';
-import testName from './graphql/resolvers/index.js';
-import schema from './graphql/schema/index.js'
+import rootResolver from './graphql/resolvers/index.js';
+import schema from './graphql/schema/index.js';
 
 const app = express();
-
-
 
 app.use(express.json());
 
@@ -14,7 +12,7 @@ app.use(
   '/graphql',
   graphqlHTTP({
     schema: schema,
-    rootValue: testName,
+    rootValue: rootResolver,
     graphiql: true,
   })
 );
