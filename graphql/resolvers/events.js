@@ -22,7 +22,7 @@ const eventResolver = {
         title: args.eventInput.title,
         description: args.eventInput.description,
         price: +args.eventInput.price,
-        date: new Date().toISOString(),
+        date: args.eventInput.date,
         creator: req.userId,
       });
       let createdEvent;
